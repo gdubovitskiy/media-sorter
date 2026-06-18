@@ -1,29 +1,45 @@
-[tool.poetry]
+[project]
 name = "media-sorter"
-version = "0.1.0"
+version = "0.2.0"
 description = "Organize files by date using Typer CLI"
-authors = ["Dubovitskiy George <gdubovitskiy@ya.ru>"]
+authors = [{ name = "Dubovitskiy George", email = "gdubovitskiy@ya.ru" }]
+requires-python = ">=3.10,<4"
 readme = "README.md"
-packages = [{include = "src"}]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+dependencies = [
+    "typer>=0.9.0,<0.10.0",
+    "click~=8.1.3",
+    "tqdm>=4.66.0,<5",
+    "python-dotenv>=1.0.0,<2",
+    "pillow>=11.3.0,<12",
+]
 
-[tool.poetry.dependencies]
-python = "^3.10"
-typer = ">=0.9.0,<0.10.0"
-click = "~8.1.3"
-tqdm = "^4.66.0"
-python-dotenv = "^1.0.0"
-pillow = "^11.3.0"
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^7.4.0"
-black = "^23.7.0"
-ruff = "^0.12.7"
-mypy = "^1.17.0"
-pre-commit = "^4.2.0"
-
-[tool.poetry.scripts]
+[project.scripts]
 media-sorter = "src.cli:app"
 
+[dependency-groups]
+dev = [
+    "pytest>=7.4.0,<8",
+    "black>=23.7.0,<24",
+    "ruff>=0.12.7,<0.13",
+    "mypy>=1.17.0,<2",
+    "pre-commit>=4.2.0,<5",
+]
+
+[tool.uv]
+default-groups = "all"
+
+[tool.uv.build-backend]
+module-name = ["src"]
+module-root = ""
+
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.9.24,<0.10.0"]
+build-backend = "uv_build"
