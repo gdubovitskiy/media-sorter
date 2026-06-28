@@ -22,7 +22,7 @@
 
 ### Prerequisites
 - Python 3.10+
-- Poetry 1.5+
+- [uv](https://docs.astral.sh/uv/) (fast Python package installer)
 
 ### Installation
 ```bash
@@ -30,20 +30,20 @@
 git clone https://github.com/gdubovitskiy/media-sorter.git
 cd media-sorter
 
-# Install dependencies
-poetry install
+# Install dependencies with uv
+uv sync
 ```
 
 ### Basic Usage
 ```bash
 # Simple organization
-poetry run media-sorter ~/source_folder ~/destination_folder
+uv run media-sorter ~/source_folder ~/destination_folder
 
 # With progress display and logging
-poetry run media-sorter ~/Photos ~/Sorted --workers 4 --log migration.log
+uv run media-sorter ~/Photos ~/Sorted --workers 4 --log migration.log
 
 # Copy files instead of moving
-poetry run media-sorter ~/Photos ~/Sorted --copy
+uv run media-sorter ~/Photos ~/Sorted --copy
 ```
 
 ### Command Options
@@ -77,15 +77,16 @@ src/
 ## 🐛 Troubleshooting
 
 ### Common Issues
-1. **"TyperArgument.make_metavar()" error**:
+1. **uv command not found**:
    ```bash
-   poetry lock --no-update
-   poetry install
+   # Install uv if not already installed
+   pip install uv
+   # or use: curl -LsSf https://astral.sh/uv/install.sh | sh
    ```
 
 2. **No files found**:
-    - Ensure filenames contain dates in `YYYYMMDD_*` format
-    - Check source directory permissions
+   - Ensure filenames contain dates in `YYYYMMDD_*` format
+   - Check source directory permissions
 
 3. **Permission errors**:
    ```bash
@@ -99,14 +100,14 @@ src/
 
 ```bash
 # 1. First do a dry-run
-poetry run media-sorter ~/DCIM/Camera ~/Photos/Organized --dry-run
+uv run media-sorter ~/DCIM/Camera ~/Photos/Organized --dry-run
 
 # 2. Check the log
 cat sorting_log.txt
 
 # 3. Run for real with 8 threads
-poetry run media-sorter ~/DCIM/Camera ~/Photos/Organized --workers 8
+uv run media-sorter ~/DCIM/Camera ~/Photos/Organized --workers 8
 
 # 4. Run with copy option
-poetry run media-sorter ~/DCIM/Camera ~/Photos/Organized --copy
+uv run media-sorter ~/DCIM/Camera ~/Photos/Organized --copy
 ```
