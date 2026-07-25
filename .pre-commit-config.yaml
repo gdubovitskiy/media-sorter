@@ -17,3 +17,10 @@ repos:
         args: [ --fix ]
       # Run the formatter.
       - id: ruff-format
+
+  # UV dependency management hooks (https://docs.astral.sh/uv/guides/integration/pre-commit/)
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: v0.11.32
+    hooks:
+      - id: uv-lock
+      - id: uv-export

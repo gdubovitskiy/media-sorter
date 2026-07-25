@@ -24,7 +24,7 @@
 - Python 3.10+
 - [uv](https://docs.astral.sh/uv/) (fast Python package installer)
 
-### Installation
+### Installation & Setup
 ```bash
 # Clone repository
 git clone https://github.com/gdubovitskiy/media-sorter.git
@@ -32,7 +32,9 @@ cd media-sorter
 
 # Install dependencies with uv
 uv sync
-```
+
+# Run pre-commit hooks to lint/format code and sync uv.lock
+pre-commit run --all-files
 
 ### Basic Usage
 ```bash
@@ -73,6 +75,25 @@ src/
 ├── logger.py       # Logging utilities
 └── utils.py        # Directory validation
 ```
+
+## 🛠️ Development & Pre-commit Hooks
+
+This project uses [pre-commit](https://pre-commit.com/) for linting, formatting and dependency management:
+
+```bash
+# Run all hooks (lint + format)
+pre-commit run --all-files
+
+# Check UV lock file changes
+pre-commit run uv-lock --files pyproject.toml
+```
+
+Available hooks:
+- `ruff-check` - Lint with auto-fix
+- `ruff-format` - Auto-format code  
+- `uv-lock` - Sync dependencies (ensures `uv.lock` stays up to date)
+
+---
 
 ## 🐛 Troubleshooting
 
