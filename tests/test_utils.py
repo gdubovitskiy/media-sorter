@@ -41,17 +41,17 @@ def test_validate_directories_creates_dest(tmp_path: Path):
 def test_print_param_basic():
     from src.utils import print_param
 
-    with patch("typer.echo") as mock_echo:
+    with patch("src.utils.console.print") as mock_print:
         print_param("Workers", 8)
-        mock_echo.assert_called_once()
+        mock_print.assert_called_once()
 
 
 def test_print_param_with_icon_and_color():
     from src.utils import print_param
 
-    with patch("typer.echo") as mock_echo:
-        print_param("Mode", "COPY", icon="📋", color=typer.colors.MAGENTA)
-        mock_echo.assert_called_once()
+    with patch("src.utils.console.print") as mock_print:
+        print_param("Mode", "COPY", icon="📋", color="magenta")
+        mock_print.assert_called_once()
 
 
 def test_validate_path_exists():

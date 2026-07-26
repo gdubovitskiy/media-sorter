@@ -210,10 +210,11 @@ def test_process_files(tmp_path: Path):
     for name in filenames:
         Image.new("RGB", (100, 100)).save(source_dir / name)
 
-    with patch("src.core.tqdm") as mock_tqdm:
-        mock_pbar = MagicMock()
-        mock_tqdm.return_value = mock_pbar
-        mock_pbar.__enter__.return_value = mock_pbar
+    with patch("src.core.Progress") as mock_progress_cls:
+        mock_progress = MagicMock()
+        mock_progress_cls.return_value = mock_progress
+        mock_progress.__enter__.return_value = mock_progress
+        mock_progress.add_task.return_value = 0
 
         process_files(
             filenames,
