@@ -40,6 +40,14 @@ def extract_exif_date(filepath: Path) -> Optional[datetime]:
     return None
 
 
+def _fmt_len(fmt: str) -> int:
+    return len(datetime(2000, 1, 1, 0, 0, 0, 0).strftime(fmt))
+
+
+def _valid_date(dt: datetime) -> bool:
+    return 1900 <= dt.year <= 2100
+
+
 def parse_date_from_filename(filename: str) -> Optional[datetime]:
     """Attempts to parse date from filename using predefined formats.
 
@@ -57,7 +65,7 @@ def parse_date_from_filename(filename: str) -> Optional[datetime]:
     from src.config import DATE_FORMATS
 
     base_name = Path(filename).stem
-    # fmt: off
+
     clean_name = (
         base_name
         .replace(" ", "")
@@ -65,17 +73,22 @@ def parse_date_from_filename(filename: str) -> Optional[datetime]:
         .replace("_", "")
         .replace(".", "")
     )
-    # fmt: on
 
     for fmt in ["%Y%m%d%H%M%S", "%Y%m%d"]:
+        length = _fmt_len(fmt)
         try:
-            return datetime.strptime(clean_name[: len(fmt)].ljust(len(fmt), "0"), fmt)
+            dt = datetime.strptime(clean_name[:length].ljust(length, "0"), fmt)
+            if _valid_date(dt):
+                return dt
         except ValueError:
             continue
 
     for fmt in DATE_FORMATS:
+        length = _fmt_len(fmt)
         try:
-            return datetime.strptime(base_name[: len(fmt)], fmt)
+            dt = datetime.strptime(base_name[:length], fmt)
+            if _valid_date(dt):
+                return dt
         except ValueError:
             continue
 
