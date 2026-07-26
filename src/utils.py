@@ -2,6 +2,9 @@ from pathlib import Path
 from typing import Any, Optional
 
 import typer
+from rich.console import Console
+
+console = Console()
 
 
 def validate_directories(source: Path, destination: Path) -> None:
@@ -12,11 +15,12 @@ def validate_directories(source: Path, destination: Path) -> None:
 
 
 def print_param(label: str, value: Any, icon: Optional[str] = None, color: Optional[str] = None):
-    """Печатает параметр с иконкой и стилем."""
-    formatted_label = typer.style(f"{label}:", bold=True)
-    formatted_value = typer.style(str(value), fg=color) if color else str(value)
+    """Печатает параметр с иконкой и стилем через Rich."""
     icon_part = f"{icon}  " if icon else ""
-    typer.echo(f"{icon_part}{formatted_label} {formatted_value}")
+    if color:
+        console.print(f"{icon_part}[bold]{label}:[/] [{color}]{value}[/]")
+    else:
+        console.print(f"{icon_part}[bold]{label}:[/] {value}")
 
 
 def validate_path(ctx: typer.Context, value: Path) -> Path:
