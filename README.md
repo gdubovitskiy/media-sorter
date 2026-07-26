@@ -3,7 +3,7 @@
 **Automatically organize files into `YYYY/MM` folders based on dates in filenames or EXIF metadata**
 *(Perfect for photos, documents, and any files with EXIF-data or pattern filename)*
 
-[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
+![Python Version from PEP 621 TOML](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2Fgdubovitskiy%2Fmedia-sorter%2Frefs%2Fheads%2Fmain%2Fpyproject.toml)
 [![Typer CLI](https://img.shields.io/badge/CLI-Typer-FF4785)](https://typer.tiangolo.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
