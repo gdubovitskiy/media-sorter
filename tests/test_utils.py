@@ -54,12 +54,12 @@ def test_print_param_with_icon_and_color():
         mock_print.assert_called_once()
 
 
-def test_validate_path_exists():
+def test_validate_path_exists(tmp_path: Path):
     from src.utils import validate_path
 
     ctx = MagicMock()
     ctx.params = {}
-    existing = Path("/tmp")
+    existing = tmp_path
 
     result = validate_path(ctx, existing)
     assert result == existing
