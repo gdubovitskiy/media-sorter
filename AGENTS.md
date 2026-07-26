@@ -5,10 +5,10 @@ Based on `CLAUDE.md`, corrected and condensed. Commands verified against actual 
 ## Quick start
 
 ```bash
-uv sync                       # install deps (uses uv, not pip)
-uv run media-sorter ~/src ~/dst  # run CLI
-uv run pytest tests/ -v --tb=short  # full test suite
-uv run pytest tests/test_core.py -k test_parse_date_from_filename -vv  # single test
+uv sync                       # install deps (uses uv, not pip) — ONLY way to set up .venv
+.venv/Scripts/python -m media_sorter ~/src ~/dst  # run CLI
+.venv/Scripts/pytest tests/ -v --tb=short  # full test suite
+.venv/Scripts/pytest tests/test_core.py -k test_parse_date_from_filename -vv  # single test
 pre-commit run --all-files    # ruff lint + format, uv-lock sync
 just upgrade                  # uv lock --upgrade
 ```
@@ -44,5 +44,8 @@ src/
 ## .venv rules
 
 - **Never** run `uv sync`, `uv lock`, `pip install`, or any command that modifies `.venv` without explicit user request.
-- Always use `uv run` to invoke Python, pytest, or the app — this ensures the existing `.venv` is used.
+- **Never use `uv run`** — it removes and recreates `.venv` every time on WSL2 (`/mnt/c/`) filesystem, even with `--no-sync`.
+- Always use `.venv/Scripts/python`, `.venv/Scripts/pytest`, etc. directly to run commands — this guarantees the existing `.venv` is used.
+- Use `uv sync` only when explicitly needed (e.g., restoring a broken `.venv`).
 - The `.venv/` directory is in `.claudeignore` — do not write files into it.
+- **Cross-platform warning:** This project lives on a Windows filesystem (`/mnt/c/`). Creating `.venv` from WSL2 produces a Linux-style venv (`bin/`, `lib/`, symlinks) that INCOMPATIBLE with PyCharm/Windows tools. **Always let the user create `.venv` from Windows.**
