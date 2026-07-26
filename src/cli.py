@@ -1,10 +1,13 @@
 from pathlib import Path
 
 import typer
+from rich import box
+from rich.panel import Panel
+from rich.table import Table
 
 from .core import process_files
 from .logger import init_logger
-from .utils import print_param, validate_directories, validate_path
+from .utils import console, validate_directories, validate_path
 
 app = typer.Typer()
 
@@ -42,29 +45,32 @@ def main(
     validate_directories(source, destination)
     files = [f.name for f in source.iterdir() if f.is_file()]
 
-    # Вывод параметров с иконками
-    typer.echo("\n" + typer.style("CONFIGURATION", fg=typer.colors.BLUE, bold=True))
-    print_param("Source directory", source, "📁", typer.colors.CYAN)
-    print_param("Target directory", destination, "📂", typer.colors.CYAN)
-    print_param("Log file path", log_file_path, "📝")
-    print_param("Worker threads", workers, "👷", typer.colors.YELLOW)
-    print_param("Operation mode", "COPY" if copy else "MOVE", "📋" if copy else "🚚", typer.colors.MAGENTA)
-    print_param(
-        "Dry run",
-        "ENABLED" if dry_run else "DISABLED",
-        "🛑" if dry_run else "✅",
-        typer.colors.RED if dry_run else typer.colors.GREEN,
+    table = Table.grid(padding=(0, 2), expand=True)
+    table.add_row("📁  [bold]Source directory:[/]",  f"[cyan]{source}[/]")
+    table.add_row("📂  [bold]Target directory:[/]",  f"[cyan]{destination}[/]")
+    table.add_row("📝  [bold]Log file path:[/]",     f"{log_file_path}")
+    table.add_row("👷  [bold]Worker threads:[/]",    f"[yellow]{workers}[/]")
+    mode_str, mode_icon = ("COPY", "📋") if copy else ("MOVE", "🚚")
+    table.add_row(f"{mode_icon}  [bold]Operation mode:[/]", f"[magenta]{mode_str}[/]")
+    dry_str, dry_icon = ("ENABLED", "🛑") if dry_run else ("DISABLED", "✅")
+    dry_color = "red" if dry_run else "green"
+    table.add_row(f"{dry_icon}  [bold]Dry run:[/]",  f"[{dry_color}]{dry_str}[/]")
+    table.add_row("📄  [bold]Files to process:[/]", f"[bright_blue]{len(files)}[/]")
+
+    panel = Panel(
+        table,
+        title="[bold blue]CONFIGURATION[/]",
+        border_style="blue",
+        box=box.ROUNDED,
+        padding=(1, 2),
     )
-    print_param("Files to process", len(files), "📄", typer.colors.BRIGHT_BLUE)
-    typer.echo("")
+    console.print()
+    console.print(panel)
+    console.print()
 
-    # Обработка файлов
-    process_files(files, source, destination, workers, log_file_path, copy, dry_run)
+    process_files(files, source, destination, workers, log_file_path, copy, dry_run, console=console)
 
-    # Результат
-    success_msg = typer.style("✅ SUCCESS! ", fg=typer.colors.GREEN, bold=True)
-    log_msg = typer.style(f"Check logs in {log_file_path}", fg=typer.colors.BLUE)
-    typer.echo(f"\n{success_msg}{log_msg}")
+    console.print(f"\n[bold green]✅ SUCCESS![/] [blue]Check logs in {log_file_path}[/]")
 
 
 if __name__ == "__main__":

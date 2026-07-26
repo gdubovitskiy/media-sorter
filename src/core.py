@@ -6,7 +6,8 @@ from typing import List, Optional
 
 from PIL import Image, UnidentifiedImageError
 from PIL.ExifTags import TAGS
-from tqdm import tqdm
+from rich.console import Console
+from rich.progress import BarColumn, Progress, SpinnerColumn, TextColumn, TimeElapsedColumn
 
 from .logger import log_message
 
@@ -165,6 +166,7 @@ def process_files(
     log_file: Path = Path("log.txt"),
     copy: bool = False,
     dry_run: bool = False,
+    console: Optional[Console] = None,
 ) -> None:
     """Processes multiple files in parallel with progress tracking.
 
@@ -176,11 +178,21 @@ def process_files(
         log_file (Path): Path to log file. Defaults to "log.txt".
         copy (bool): Copy files if True. Defaults to False.
         dry_run (bool): Simulate processing if True. Defaults to False.
+        console (Console, optional): Rich console for progress output.
 
     Example:
         >>> process_files(["1.jpg", "2.jpg"], Path("/src"), Path("/dest"))
     """
-    with tqdm(total=len(files), desc="Processing files") as pbar:
+    progress = Progress(
+        SpinnerColumn(),
+        TextColumn("[progress.description]{task.description}"),
+        BarColumn(),
+        TextColumn("{task.completed}/{task.total}"),
+        TimeElapsedColumn(),
+        console=console,
+    )
+    with progress:
+        task = progress.add_task("Processing files", total=len(files))
         with ThreadPoolExecutor(max_workers=workers) as executor:
             futures = {
                 executor.submit(
@@ -197,5 +209,5 @@ def process_files(
 
             for future in as_completed(futures):
                 future.result()
-                pbar.update(1)
-                pbar.set_postfix_str(f"Last: {futures[future]}", refresh=False)
+                progress.advance(task)
+                progress.update(task, description=f"Last: {futures[future]}")
