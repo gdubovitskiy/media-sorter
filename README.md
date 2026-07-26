@@ -73,12 +73,25 @@ Options:
 ## 🛠️ Project Structure
 
 ```
-src/
-├── cli.py      # Command-line interface (Typer)
-├── core.py     # EXIF extraction, filename parsing, file operations
-├── logger.py   # Logging utilities
-├── utils.py    # Directory validation and helpers
-└── config.py   # Date format patterns and EXIF tag config
+media-sorter/
+├── src/                    # Application source code
+│   ├── cli.py              # Command-line interface (Typer app)
+│   ├── core.py             # EXIF extraction, filename parsing, file operations
+│   ├── logger.py           # Logging utilities (init_logger, log_message)
+│   ├── utils.py            # Directory validation, path helpers, param display
+│   └── config.py           # Date format patterns and EXIF tag constant
+├── tests/                  # Test suite (pytest)
+│   ├── test_core.py        # Unit tests for core processing logic
+│   ├── test_cli.py         # Integration tests for CLI
+│   ├── test_logger.py      # Tests for logging utilities
+│   └── test_utils.py       # Tests for validation and helpers
+├── pyproject.toml          # Project config, dependencies, build settings
+├── uv.lock                 # Locked dependency versions
+├── .pre-commit-config.yaml # Pre-commit hooks (ruff, uv-lock)
+├── .python-version         # Python version for uv
+├── AGENTS.md               # Guidelines for AI coding assistants
+├── CLAUDE.md               # Guidelines for Claude Code AI assistant
+└── README.md               # This file
 ```
 
 ## 🛠️ Development & Pre-commit Hooks
