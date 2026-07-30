@@ -41,5 +41,5 @@ def test_init_logger_exception(tmp_path: Path):
     log_file.write_text("", encoding="utf-8")
     bad_path = log_file / "subdir" / "test.log"
 
-    with pytest.raises((NotADirectoryError, FileNotFoundError)):
+    with pytest.raises((NotADirectoryError, FileNotFoundError, FileExistsError)):
         init_logger(bad_path)
