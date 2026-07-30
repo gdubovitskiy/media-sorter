@@ -86,7 +86,7 @@ media-sorter/
 
 ### Ключевые зависимости (`pyproject.toml`)
 - Ядро приложения: typer, click, tqdm, pillow
-- Инструменты разработки: pytest, black, ruff, mypy, python-dotenv, pre-commit
+- Инструменты разработки: pytest, black, ruff, pyrefly, python-dotenv, pre-commit
 
 ---
 
