@@ -9,6 +9,7 @@ uv sync                       # install deps (uses uv, not pip) — ONLY way to 
 .venv/Scripts/python -m media_sorter ~/src ~/dst  # run CLI
 .venv/Scripts/pytest tests/ -v --tb=short  # full test suite
 .venv/Scripts/pytest tests/test_core.py -k test_parse_date_from_filename -vv  # single test
+.venv/Scripts/pyrefly .       # type check
 pre-commit run --all-files    # ruff lint + format, uv-lock sync
 just upgrade                  # uv lock --upgrade
 ```
